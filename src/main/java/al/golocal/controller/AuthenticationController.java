@@ -1,14 +1,17 @@
 package al.golocal.controller;
 
 import al.golocal.dto.request.RefreshTokenRequest;
+import al.golocal.dto.response.ApiResponse;
+import al.golocal.dto.response.UserDto;
 import al.golocal.entity.User;
 import al.golocal.dto.request.LoginRequest;
 import al.golocal.dto.request.SignupRequest;
-import al.golocal.dto.response.LoginResponse;
+import al.golocal.dto.response.LoginDto;
 import al.golocal.service.AuthenticationService;
 import al.golocal.service.JwtService;
 import al.golocal.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,27 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/auth")
 @RestController
+@RequiredArgsConstructor
 public class AuthenticationController {
     private final JwtService jwtService;
     private final UserService userService;
-
     private final AuthenticationService authenticationService;
 
-    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService, UserService userService) {
-        this.jwtService = jwtService;
-        this.userService = userService;
-        this.authenticationService = authenticationService;
-    }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<ApiResponse<UserDto>> register(@RequestBody SignupRequest signupRequest) {
         User registeredUser = authenticationService.signup(signupRequest);
-
-        return ResponseEntity.ok(registeredUser);
+        return ResponseEntity.ok(new ApiResponse<>(0, userService.convertToDto(registeredUser), "User registered successfully"));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<ApiResponse<LoginDto>> authenticate(@RequestBody LoginRequest loginRequest) {
         // Authenticate the user
         User authenticatedUser = authenticationService.authenticate(loginRequest);
 
@@ -48,16 +45,19 @@ public class AuthenticationController {
         String jwtRefreshToken = jwtService.generateRefreshToken(authenticatedUser);
 
         // Prepare the response with both tokens
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(jwtToken);
-        loginResponse.setExpiresIn(jwtService.getExpirationTime());
-        loginResponse.setRefreshToken(jwtRefreshToken);
+        LoginDto loginDto = new LoginDto();
+        loginDto.setAccessToken(jwtToken);
+        loginDto.setExpiresIn(jwtService.getExpirationTime());
+        loginDto.setRefreshToken(jwtRefreshToken);
+        loginDto.setRefreshExpiresIn(jwtService.getRefreshExpirationTime());
+        loginDto.setUser(userService.convertToDto(authenticatedUser));
 
-        return ResponseEntity.ok(loginResponse);
+        ApiResponse apiResponse = new ApiResponse(0, loginDto,"User logged in successfully");
+        return ResponseEntity.ok(apiResponse);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<ApiResponse<LoginDto>> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
 
         // Validate the refresh token
@@ -75,12 +75,13 @@ public class AuthenticationController {
         String newAccessToken = jwtService.generateToken(userDetails);
 
         // Build the response
-        LoginResponse response = new LoginResponse();
-        response.setToken(newAccessToken);
+        LoginDto response = new LoginDto();
+        response.setAccessToken(newAccessToken);
         response.setExpiresIn(jwtService.getExpirationTime());
         response.setRefreshToken(refreshToken); // Optional: include the same refresh token
+        response.setRefreshExpiresIn(jwtService.getRefreshExpirationTime());
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<LoginDto>(0, response, "Access token refreshed successfully"));
     }
 
 }

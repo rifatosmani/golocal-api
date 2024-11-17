@@ -3,6 +3,8 @@ package al.golocal.controller;
 import al.golocal.entity.Category;
 import al.golocal.entity.User;
 import al.golocal.repository.CategoryRepository;
+import al.golocal.service.CategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,28 +20,21 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/category")
+@RequiredArgsConstructor
 public class CategoryController {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     // Get all categories and return them as a category tree
     @GetMapping
-    public List<Category> getAllCategories() {
-        // Fetch all categories from the database
-        List<Category> allCategories = categoryRepository.findByParentIsNull();
-
-        // Build category tree
-        return allCategories;
+    public List<Category> getCategoryTree() {
+        return categoryService.getAllCategories();
     }
 
     // Get category by ID
     @GetMapping("/{id}")
     public Category getCategoryById(@PathVariable Long id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        category.setChildren(null);
-        return category;
+        return categoryService.getCategoryById(id);
     }
 
 }

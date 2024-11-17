@@ -4,14 +4,17 @@ import al.golocal.dto.request.LoginRequest;
 import al.golocal.dto.request.SignupRequest;
 import al.golocal.entity.Role;
 import al.golocal.entity.User;
+import al.golocal.exception.AuthenticationFailedException;
 import al.golocal.repository.RoleRepository;
 import al.golocal.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
 
@@ -20,18 +23,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
-
-    public AuthenticationService(
-            UserRepository userRepository,
-            RoleRepository roleRepository,
-            AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder
-    ) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public User signup(SignupRequest input) {
 
@@ -49,14 +40,21 @@ public class AuthenticationService {
     }
 
     public User authenticate(LoginRequest input) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getEmail(),
-                        input.getPassword()
-                )
-        );
+        User user = userRepository.findByEmail(input.getEmail())
+                .orElseThrow(() -> new AuthenticationFailedException("User not found"));
 
-        return userRepository.findByEmail(input.getEmail())
-                .orElseThrow();
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            input.getEmail(),
+                            input.getPassword()
+                    )
+            );
+        } catch (Exception e) {
+            throw new AuthenticationFailedException("Invalid password");
+        }
+
+
+        return user;
     }
 }

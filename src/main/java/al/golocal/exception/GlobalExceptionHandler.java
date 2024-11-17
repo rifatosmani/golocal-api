@@ -1,5 +1,6 @@
 package al.golocal.exception;
 
+import al.golocal.dto.response.ApiResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
@@ -29,5 +30,12 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(ex.getMessage());
     }
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<ApiResponse> handleAuthenticationFailedException(AuthenticationFailedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiResponse(1, null, ex.getMessage()));
+    }
+
     // Handle other authentication-related exceptions as needed
 }

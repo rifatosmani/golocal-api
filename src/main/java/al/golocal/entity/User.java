@@ -45,6 +45,10 @@ public class User implements UserDetails {
     @Column
     private Date modDate;
 
+    @OneToOne
+    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
+    private Address address;
+
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "role_id", referencedColumnName = "roleId", nullable = false)
     private Role role;
@@ -75,6 +79,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
 }
