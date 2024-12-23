@@ -49,7 +49,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "address_id", referencedColumnName = "addressId")
     private Address address;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "roleId", nullable = false)
     private Role role;
 

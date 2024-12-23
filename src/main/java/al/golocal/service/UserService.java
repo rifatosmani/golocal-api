@@ -4,10 +4,12 @@ import al.golocal.entity.User;
 import al.golocal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import al.golocal.dto.response.UserDto;
+import al.golocal.dto.UserDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +53,17 @@ public class UserService {
     public List<User> findUsersByZipCode(String zipCode) {
         return userRepository.findByAddressZipCode(zipCode);
     }
+
     public UserDto convertToDto(User user) {
         return modelMapper.map(user, UserDto.class);
+    }
+
+    public Long getUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            User u = (User)authentication.getPrincipal();
+            return u.getUserId();
+        }
+        return null;
     }
 }

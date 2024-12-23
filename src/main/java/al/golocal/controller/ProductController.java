@@ -1,35 +1,60 @@
 package al.golocal.controller;
 
-import al.golocal.entity.Product;
-import al.golocal.repository.ProductRepository;
+import al.golocal.dto.ApiResponse;
+import al.golocal.dto.ProductDto;
 import al.golocal.service.ProductService;
+import al.golocal.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product")
 @RequiredArgsConstructor
+@RequestMapping("/api/product")
 public class ProductController {
 
     private final ProductService productService;
 
-    // Get product by ID
-    @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
+    private final UserService userService;
+
+    @GetMapping()
+    public ResponseEntity<ApiResponse<ProductDto>> getProductById(@RequestParam Long productId) {
+        ApiResponse<ProductDto> apiResponse = new ApiResponse<ProductDto>(0,  productService.getProductById(productId), "");
+        return ResponseEntity.ok(apiResponse);
     }
 
-    // Get products by name or description (search bar functionality)
-    @GetMapping("/search")
-    public List<Product> searchProducts(@RequestParam String keyword) {
-        return productService.searchProducts(keyword);
+    @GetMapping("/site")
+    public ResponseEntity<ApiResponse<List<ProductDto>>> getProductsBySite(@RequestParam Long siteId) {
+        ApiResponse<List<ProductDto>> apiResponse = new ApiResponse<List<ProductDto>>(0, productService.getProductsBySite(siteId), "");
+        return ResponseEntity.ok(apiResponse);
     }
 
-    // Get products by category ID
-    @GetMapping("/category/{categoryId}")
-    public List<Product> getProductsByCategory(@PathVariable Long categoryId) {
-        return productService.getProductsByCategory(categoryId);
+    @PostMapping
+    public ResponseEntity<ApiResponse<ProductDto>> addProduct(@RequestBody ProductDto productDto) {
+        ApiResponse<ProductDto> apiResponse = new ApiResponse<ProductDto>(0, productService.save(productDto), "");
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<ProductDto>> deleteProduct(@RequestParam Long productId) {
+        productService.delete(productId);
+        ApiResponse<ProductDto> apiResponse = new ApiResponse<>(0, null, "");
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/disable")
+    public ResponseEntity<ApiResponse<ProductDto>> disableProduct(@RequestParam Long productId) {
+        productService.disable(productId);
+        ApiResponse<ProductDto> apiResponse = new ApiResponse<>(0, null, "");
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/enable")
+    public ResponseEntity<ApiResponse<ProductDto>> enableProduct(@RequestParam Long productId) {
+        productService.enable(productId);
+        ApiResponse<ProductDto> apiResponse = new ApiResponse<>(0, null, "");
+        return ResponseEntity.ok(apiResponse);
     }
 }

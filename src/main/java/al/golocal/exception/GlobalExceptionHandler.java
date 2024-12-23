@@ -1,6 +1,6 @@
 package al.golocal.exception;
 
-import al.golocal.dto.response.ApiResponse;
+import al.golocal.dto.ApiResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;

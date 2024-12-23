@@ -1,12 +1,12 @@
 package al.golocal.controller;
 
-import al.golocal.dto.request.RefreshTokenRequest;
-import al.golocal.dto.response.ApiResponse;
-import al.golocal.dto.response.UserDto;
+import al.golocal.dto.RefreshTokenRequest;
+import al.golocal.dto.ApiResponse;
+import al.golocal.dto.UserDto;
 import al.golocal.entity.User;
-import al.golocal.dto.request.LoginRequest;
-import al.golocal.dto.request.SignupRequest;
-import al.golocal.dto.response.LoginDto;
+import al.golocal.dto.LoginRequest;
+import al.golocal.dto.SignupRequest;
+import al.golocal.dto.LoginDto;
 import al.golocal.service.AuthenticationService;
 import al.golocal.service.JwtService;
 import al.golocal.service.UserService;

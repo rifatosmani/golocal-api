@@ -35,7 +35,7 @@ public class Category {
     private int status;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", referencedColumnName = "categoryId")
     private Category parent;
 
@@ -45,6 +45,6 @@ public class Category {
         return parent != null ? parent.getCategoryId() : null;
     }
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     private List<Category> children;
 }

@@ -1,8 +1,7 @@
 package al.golocal.mapper;
 
-import al.golocal.dto.response.UserDto;
+import al.golocal.dto.UserDto;
 import al.golocal.entity.User;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

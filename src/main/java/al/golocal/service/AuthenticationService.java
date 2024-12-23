@@ -1,7 +1,7 @@
 package al.golocal.service;
 
-import al.golocal.dto.request.LoginRequest;
-import al.golocal.dto.request.SignupRequest;
+import al.golocal.dto.LoginRequest;
+import al.golocal.dto.SignupRequest;
 import al.golocal.entity.Role;
 import al.golocal.entity.User;
 import al.golocal.exception.AuthenticationFailedException;
