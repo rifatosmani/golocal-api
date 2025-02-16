@@ -1,1 +1,10 @@
 /Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/GolocalApplicationTests.java
+/Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/controller/MediaControllerTest.java
+/Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/controller/MediaControllerTest2.java
+/Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/repository/AddressRepositoryTest.java
+/Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/repository/CategoryRepositoryTest.java
+/Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/repository/MediaRepositoryTest.java
+/Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/repository/ProductRepositoryTest.java
+/Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/repository/RoleRepositoryTest.java
+/Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/repository/SiteRepositoryTest.java
+/Users/rifatosmani/workspace/golocal/golocal-api/src/test/java/al/golocal/repository/UserRepositoryTest.java

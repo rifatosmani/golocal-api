@@ -7,16 +7,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
 public interface MediaRepository extends JpaRepository<Media, Long> {
 
-    Media findByMediaId(Long mediaId);
-
-    @Query("SELECT m FROM Media m WHERE m.product.productId = :productId")
-    List<Media> findByProductId(@Param("productId") Long productId);
+    List<Media> findByRefIdAndRefTable(Long refId,String refTable);
 
     @Modifying
     @Query("UPDATE Media m SET m.status = 0 WHERE m.mediaId = :id")
@@ -24,5 +22,7 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
 
     @Modifying
     @Query("UPDATE Media m SET m.status = 1 WHERE m.mediaId = :id")
-    void enableById(@Param("id") Long id);
-}
+    int enableById(@Param("id") Long id);
+
+    List<Media> getMediaByRefIdAndRefTableAndMainIsTrue(Long refId, String refTable);
+    }

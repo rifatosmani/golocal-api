@@ -3,8 +3,7 @@ package al.golocal.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,7 +12,10 @@ import java.util.List;
 
 @Table(name = "product")
 @Entity
-@Getter @Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,10 +45,6 @@ public class Product {
     public Long getCategoryId() {
         return category != null ? category.getCategoryId() : null;
     }
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    private List<Media> mediaList;
 
     Double price;
 

@@ -1,5 +1,7 @@
 package al.golocal.controller;
 
+import al.golocal.dto.ApiResponse;
+import al.golocal.dto.UserDto;
 import al.golocal.service.UserService;
 import al.golocal.entity.User;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("/users")
+@RequestMapping("/api/user")
 @RestController
 public class UserController {
     private final UserService userService;
@@ -22,7 +24,6 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -31,11 +32,10 @@ public class UserController {
         return ResponseEntity.ok(currentUser);
     }
 
-    @GetMapping("/")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<List<User>> allUsers() {
-        List <User> users = userService.allUsers();
-
-        return ResponseEntity.ok(users);
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<UserDto>>> allUsers() {
+        List <UserDto> users = userService.allUsers();
+        ApiResponse<List<UserDto>> apiResponse = new ApiResponse<List<UserDto>>(0,users,"");
+        return ResponseEntity.ok(apiResponse);
     }
 }

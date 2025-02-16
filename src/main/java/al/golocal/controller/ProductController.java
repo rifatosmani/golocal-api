@@ -25,9 +25,9 @@ public class ProductController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/site")
-    public ResponseEntity<ApiResponse<List<ProductDto>>> getProductsBySite(@RequestParam Long siteId) {
-        ApiResponse<List<ProductDto>> apiResponse = new ApiResponse<List<ProductDto>>(0, productService.getProductsBySite(siteId), "");
+    @GetMapping("/site/{id}")
+    public ResponseEntity<ApiResponse<List<ProductDto>>> getProductsBySite(@PathVariable Long id) {
+        ApiResponse<List<ProductDto>> apiResponse = new ApiResponse<List<ProductDto>>(0, productService.getProductsBySite(id), "");
         return ResponseEntity.ok(apiResponse);
     }
 

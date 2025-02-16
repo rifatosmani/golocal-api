@@ -1,8 +1,10 @@
 package al.golocal.dto;
 
+import al.golocal.entity.Media;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class ProductDto {
@@ -25,4 +27,5 @@ public class ProductDto {
 
     private Integer status;
 
+    private List<Media> media;
 }

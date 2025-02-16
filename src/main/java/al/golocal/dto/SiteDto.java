@@ -1,9 +1,11 @@
 package al.golocal.dto;
 
 import al.golocal.entity.Address;
+import al.golocal.entity.Media;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class SiteDto {
@@ -25,5 +27,9 @@ public class SiteDto {
     private Date addDate;
 
     private Date modDate;
+
+    private List<Media> media;
+
+    private String extDescription;
 
 }

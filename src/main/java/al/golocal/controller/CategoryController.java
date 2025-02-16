@@ -1,5 +1,8 @@
 package al.golocal.controller;
 
+import al.golocal.dto.ApiResponse;
+import al.golocal.dto.CategoryDto;
+import al.golocal.dto.ProductDto;
 import al.golocal.entity.Category;
 import al.golocal.entity.User;
 import al.golocal.repository.CategoryRepository;
@@ -27,14 +30,14 @@ public class CategoryController {
 
     // Get all categories and return them as a category tree
     @GetMapping
-    public List<Category> getCategoryTree() {
-        return categoryService.getAllCategories();
+    public ApiResponse<List<CategoryDto>> getCategoryTree() {
+        return new ApiResponse<List<CategoryDto>>(0, categoryService.getAllCategories(), "");
     }
 
     // Get category by ID
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable Long id) {
-        return categoryService.getCategoryById(id);
+    public ApiResponse<CategoryDto> getCategoryById(@PathVariable Long id) {
+        return new ApiResponse<CategoryDto>(0,categoryService.getCategoryById(id),"");
     }
 
 }

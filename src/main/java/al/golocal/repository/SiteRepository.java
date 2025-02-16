@@ -15,6 +15,10 @@ public interface SiteRepository extends CrudRepository<Site, Long>{
     @Query("SELECT s FROM Site s WHERE s.userId = :userId")
     List<Site> findByUserId(@Param("userId") Long userId);
 
+    List<Site> findSiteByCategoryId(Long categoryId);
+
+    List<Site> findSiteByStatus(Integer status);
+
     @Modifying
     @Query("UPDATE Site s SET s.status = 0 WHERE s.siteId = :id")
     void disableById(@Param("id") Long id);
@@ -22,5 +26,7 @@ public interface SiteRepository extends CrudRepository<Site, Long>{
     @Modifying
     @Query("UPDATE Site s SET s.status = 1 WHERE s.siteId = :id")
     void enableById(@Param("id") Long id);
+
+
 
 }

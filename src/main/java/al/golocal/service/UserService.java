@@ -1,6 +1,8 @@
 package al.golocal.service;
 
 import al.golocal.entity.User;
+import al.golocal.exception.AuthenticationFailedException;
+import al.golocal.mapper.GenericMapper;
 import al.golocal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,23 +22,31 @@ public class UserService {
 
     private final ModelMapper modelMapper;
 
+    private final GenericMapper genericMapper;
+
     private final UserRepository userRepository;
 
-    public List<User> allUsers() {
+    public List<UserDto> allUsers() {
         List<User> users = new ArrayList<>();
 
         userRepository.findAll().forEach(users::add);
 
-        return users;
+        return genericMapper.toDtoList(users, UserDto.class);
+    }
+
+    public User getUserByUsername(String username){
+        User user = userRepository.findByEmailOrUsername(username,username)
+                .orElseThrow(() -> new AuthenticationFailedException("User not found"));
+        return user;
     }
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Fetch the user from the database
-        al.golocal.entity.User user = userRepository.findByEmail(username)
+        User user = userRepository.findByEmailOrUsername(username,username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
 
         // Convert your User entity into Spring Security's UserDetails
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
+                .withUsername(user.getUsername())
                 .password(user.getPassword())
                 .roles(user.getRole().getName().name()) // Assuming roles are enums or strings
                 .build();

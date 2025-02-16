@@ -3,8 +3,7 @@ package al.golocal.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,7 +12,10 @@ import java.util.Date;
 
 @Table(name = "site")
 @Entity
-@Getter @Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Site {
 
     @Id
@@ -27,6 +29,7 @@ public class Site {
 
     private Long userId;
 
+    /*
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "categoryId")
@@ -36,7 +39,9 @@ public class Site {
     public Long getCategoryId() {
         return category != null ? category.getCategoryId() : null;
     }
+    */
 
+    private Long categoryId;
     @OneToOne
     @JoinColumn(name = "address_id", referencedColumnName = "addressId", nullable = true)
     private Address address;
@@ -50,4 +55,5 @@ public class Site {
     @UpdateTimestamp
     private Date modDate;
 
+    private String extDescription;
 }

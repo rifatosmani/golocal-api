@@ -32,9 +32,16 @@ public class SiteService {
         }
         return sp;
     }
+    public List<SiteDto> getSiteByCategoryId(Long categoryId) {
+        return genericMapper.toDtoList(siteRepository.findSiteByCategoryId(categoryId), SiteDto.class);
+    }
 
-    public List<SiteDto> getServiceByUser() {
+    public List<SiteDto> getSiteByUser() {
         return genericMapper.toDtoList(siteRepository.findByUserId(userService.getUserId()), SiteDto.class);
+    }
+
+    public List<SiteDto> getAllActiveSites() {
+        return genericMapper.toDtoList(siteRepository.findSiteByStatus(1), SiteDto.class);
     }
 
     public SiteDto save(SiteDto siteDto) {

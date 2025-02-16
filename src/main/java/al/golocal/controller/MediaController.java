@@ -14,18 +14,21 @@ import org.springframework.web.multipart.MultipartFile;
 public class MediaController {
     private final MediaService mediaService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<ApiResponse<Media>> uploadMedia(@RequestParam("file") MultipartFile file,@RequestParam(value = "productId",required = false) Long productId, @RequestParam(value = "siteId",required = false) Long siteId) {
-        Media media = mediaService.uploadFile(file,productId,siteId);
+    @PostMapping
+    public ResponseEntity<ApiResponse<Media>> uploadMedia(@RequestParam("file") MultipartFile file,@RequestParam(value = "refId",required = false) Long refId, @RequestParam(value = "refTable",required = false) String refTable, @RequestParam(value = "main",required = false) Boolean main,@RequestParam(value = "filename",required = false) String filename) {
+        if(main == true){
+            this.mediaService.deleteMainMedia(refId,refTable);
+        }
+        Media media = mediaService.uploadFile(file,refId,refTable,main,filename);
         media.setUrl(mediaService.prepareFullUrl(media.getUrl()));
         ApiResponse<Media> apiResponse = new ApiResponse<>(0, media, "Media uploaded successfully");
         return ResponseEntity.ok(apiResponse);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<ApiResponse<String>> deleteMedia(@RequestParam("mediaId") Long mediaId) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<String>> deleteMedia(@PathVariable Long id) {
         try {
-            mediaService.deleteFile(mediaId);
+            mediaService.deleteFile(id);
         }catch (Exception e){
             e.printStackTrace();
         }

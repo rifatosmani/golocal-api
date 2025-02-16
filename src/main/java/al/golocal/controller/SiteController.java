@@ -24,11 +24,23 @@ public class SiteController {
         ApiResponse<SiteDto> apiResponse = new ApiResponse<SiteDto>(0, siteService.getSiteById(id),"");
         return ResponseEntity.ok(apiResponse);
     }
-    @GetMapping()
-    public ResponseEntity<ApiResponse<List<SiteDto>>> getSitesByUser() {
-        ApiResponse<List<SiteDto>> apiResponse = new ApiResponse<List<SiteDto>>(0, siteService.getServiceByUser(),"");
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<ApiResponse<List<SiteDto>>> getSiteByCategoryId(@PathVariable Long id) {
+        ApiResponse<List<SiteDto>> apiResponse = new ApiResponse<List<SiteDto>>(0, siteService.getSiteByCategoryId(id),"");
         return ResponseEntity.ok(apiResponse);
     }
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<List<SiteDto>>> getSitesByUser() {
+        ApiResponse<List<SiteDto>> apiResponse = new ApiResponse<List<SiteDto>>(0, siteService.getSiteByUser(),"");
+        return ResponseEntity.ok(apiResponse);
+    }
+    @GetMapping()
+    public ResponseEntity<ApiResponse<List<SiteDto>>> getAllSites() {
+        ApiResponse<List<SiteDto>> apiResponse = new ApiResponse<List<SiteDto>>(0, siteService.getAllActiveSites(),"");
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse<SiteDto>> addSite(@RequestBody SiteDto siteDto) {
         siteDto.setUserId(userService.getUserId());

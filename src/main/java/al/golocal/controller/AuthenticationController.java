@@ -71,6 +71,8 @@ public class AuthenticationController {
         // Load the user details
         UserDetails userDetails = userService.loadUserByUsername(username);
 
+        User user = userService.getUserByUsername(username);
+
         // Generate a new access token
         String newAccessToken = jwtService.generateToken(userDetails);
 
@@ -80,6 +82,7 @@ public class AuthenticationController {
         response.setExpiresIn(jwtService.getExpirationTime());
         response.setRefreshToken(refreshToken); // Optional: include the same refresh token
         response.setRefreshExpiresIn(jwtService.getRefreshExpirationTime());
+        response.setUser(userService.convertToDto(user));
 
         return ResponseEntity.ok(new ApiResponse<LoginDto>(0, response, "Access token refreshed successfully"));
     }

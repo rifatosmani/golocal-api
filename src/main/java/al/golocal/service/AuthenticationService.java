@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final UserRepository userRepository;
 
+    private final UserService userService;
+
     private final RoleRepository roleRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -40,8 +42,7 @@ public class AuthenticationService {
     }
 
     public User authenticate(LoginRequest input) {
-        User user = userRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new AuthenticationFailedException("User not found"));
+        User user = userService.getUserByUsername(input.getEmail());
 
         try {
             authenticationManager.authenticate(
